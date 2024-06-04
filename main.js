@@ -21,6 +21,7 @@ class gameBoard {
     constructor(){
         this.width = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
         this.height = ['1','2','3','4','5','6','7','8','9','10'];
+        this.board = {};
         this.shipLocation = false;
         this.missLocation = false;
         this.hitLocation = false;
@@ -28,13 +29,12 @@ class gameBoard {
     }
 
     createBoard() {
-        const gameBoard = [];
         for(let col of this.width) {
             for (let row of this.height) {
-                gameBoard.push(`${col}${row}`);
+                this.board[`${col}${row}`] = null
             }
         }
-        return gameBoard
+        return this.board
     }
 
     createShips() {
@@ -47,7 +47,21 @@ class gameBoard {
     }
 
     placeShip(ship, coordinate, orientation){
+        let shipPart = null;
+        if(orientation === horizontal){
+            shipPart = gameBoard[findIndex(target => target.value)]
+            for(let i = 0; i<ship.length; i++){
+                shipPart 
+            }
+        }
+    }
 
+    modifyBoard(key, value) {
+        if (this.board.hasOwnProperty(key)){
+            this.board[key] = value;
+        } else {
+            console.log(`key ${key} does not exist`);
+        }
     }
 
     receiveAttack(col, row){
@@ -58,11 +72,6 @@ class gameBoard {
     }
 
 }
-
-
-
-
-
 
 const myBoard = new gameBoard();
 console.log(myBoard.createBoard());
