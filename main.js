@@ -1,5 +1,6 @@
 class Ship {
-    constructor(length) {
+    constructor(name, length) {
+        this.name = name;
         this.length = length;
         this.damage = 0;
         this.sunk = false;
@@ -26,6 +27,7 @@ class gameBoard {
         this.missLocation = false;
         this.hitLocation = false;
         this.allShipsSunk = false;
+        this.createBoard();
     }
 
     createBoard() {
@@ -37,22 +39,47 @@ class gameBoard {
         return this.board
     }
 
-    createShips() {
-        const carrier = new Ship(5);
-        const battleship = new Ship(4);
-        const cruiser = new Ship(3);
-        const submarine = new Ship(3);
-        const patrolBoat = new Ship(2);
-        return {carrier, battleship, cruiser, submarine, patrolBoat};
+    getKeys(){
+        const keys = Object.keys(this.board);
+        return keys;
     }
 
+    // createShips() {
+    //     const ships = {
+    //     carrier:new Ship("Carrier", 5),
+    //     battleship:new Ship("Battleship", 4),
+    //     cruiser:new Ship("Cruiser", 3),
+    //     submarine:new Ship("Submarine", 3),
+    //     patrolBoat:new Ship("Patrolboat", 2)
+    //     }
+    //     return ships;
+    // }
+
     placeShip(ship, coordinate, orientation){
-        let shipPart = null;
-        if(orientation === horizontal){
-            shipPart = gameBoard[findIndex(target => target.value)]
-            for(let i = 0; i<ship.length; i++){
-                shipPart 
+        const keys = this.getKeys();
+        const currentIndex = keys.indexOf(coordinate);
+
+        if(currentIndex === -1){
+            console.log('invalid starting coordinate');
+            return;
+        }
+
+        let increment = 1;
+        if (orientation === 'vertical'){
+            increment = 10;
+        }
+
+        for (let i = 0; i < ship.length; i++){
+            const currentCoordinate = keys[currentIndex + i * increment];
+            if(!currentCoordinate || this.board[currentCoordinate] !== null) {
+                console.log('invalid ship placement');
+                return;
             }
+        }
+
+        for(let i = 0; i < ship.length; i++) {
+            const currentCoordinate = keys[currentIndex + i * increment];
+            this.modifyBoard(currentCoordinate, ship.name);
         }
     }
 
@@ -71,12 +98,24 @@ class gameBoard {
         return attacked
     }
 
+    print(){
+        console.log(this.board);
+    }
+
 }
 
 const myBoard = new gameBoard();
-console.log(myBoard.createBoard());
-console.log(myBoard.createShips());
+myBoard.createBoard();
+const carrier = new Ship("Carrier", 5);
+myBoard.placeShip(carrier, 'A1', 'vertical');
+myBoard.print();
 
+
+// myBoard.placeShip(ships.carrier, 'A1', 'horizontal');
+
+
+// myBoard.modifyBoard('A1', ships['battleship'].name);
+// myBoard.print();
 
 
 //console.log(myBoard.receiveAttack('a', '1'));
